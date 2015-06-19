@@ -20,7 +20,8 @@ export default Ember.Component.extend({
       var playerElement = this.$(`#${this.get('clapprParentId')}`);
       var player = new Clappr.Player({
         source: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
-        plugins: { playback: [P2PHLS], container: [P2PHLSStats] },
+        // plugins: { playback: [P2PHLS], container: [P2PHLSStats] },
+        plugins: { playback: [P2PHLS] },
         width: '100%',
         height: 500,
         autoPlay: this.get('autoPlay')
