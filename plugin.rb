@@ -22,6 +22,7 @@ after_initialize do
     end
   end
 
+
   DiscourseGallery::Engine.routes.draw do
     get '/' => 'contactus#index'
   end
