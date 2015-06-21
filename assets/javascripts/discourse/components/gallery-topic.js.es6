@@ -1,4 +1,4 @@
-var isEmpty = Ember.isEmpty;
+let isEmpty = Ember.isEmpty;
 
 export default Ember.Component.extend({
   tagName: 'li',
@@ -9,10 +9,11 @@ export default Ember.Component.extend({
   topic: null,
 
   _clapprUrl: null,
+  _ytUrl: null,
   _post: null,
 
-  clapprParentId: function() {
-    return `clappr-${this.elementId}`;
+  videoParentId: function() {
+    return `gallery-${this.elementId}`;
   }.property('elementId'),
 
 // This will be removed, once fixed at api
@@ -34,28 +35,52 @@ export default Ember.Component.extend({
             this.initializeClappr(url);
           }
         }
+
+        if(post.cooked.indexOf('data-youtube-id') !== -1) {
+          this.initializeYT(post.cooked);
+        }
       }
     }.bind(this));
   }.on('didInsertElement'),
 
-  initializeClappr: function(url) {
+  initializeClappr(url) {
     Ember.run.scheduleOnce('afterRender', this, function() {
       new Clappr.Player({
         source: url,
-        parentId: `#${this.get('clapprParentId')}`,
+        parentId: `#${this.get('videoParentId')}`,
         width: 256,
         height: 225
       });
     });
   },//.on('didInsertElement')
 
+  initializeYT(cooked) {
+    let $cooked = $(cooked);
+    let filteredYT = $cooked.filter('.lazyYT');
+
+    this.set('_ytUrl', filteredYT.prop('outerHTML'));
+
+    filteredYT = filteredYT.attr({
+      'data-width': '256',
+      'data-height': '225'
+    });
+
+    let lazyYTContainer = $(`#${this.get('videoParentId')}`).append(filteredYT);
+    let lazyYT = $('.lazyYT', lazyYTContainer);
+    lazyYT.lazyYT();
+  },
+
   actions: {
     playInTV() {
-      debugger;
-      var body = $('html, body');
+      let body = $('html, body');
+      let videoUrl = this.get('_ytUrl') || this.get('_clapprUrl');
       body.animate({scrollTop:0}, '100', 'swing');
 
-      this.sendAction('action', this.get('_clapprUrl'), this.get('_post'));
+      this.sendAction('action', {
+        url: videoUrl,
+        isYTVideo: !Ember.isBlank(this.get('_ytUrl')),
+        post: this.get('_post')
+      });
     }
   }
 });
