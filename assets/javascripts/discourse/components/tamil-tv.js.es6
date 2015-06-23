@@ -8,6 +8,8 @@ export default Ember.Component.extend({
   isYTVideo: false,
   autoPlay: true,
 
+  showLogin: 'showLogin',
+
   videoParentId: function() {
     return `gallery-${this.elementId}`;
   }.property('elementId'),
@@ -52,5 +54,20 @@ export default Ember.Component.extend({
 
   urlDidChange: function() {
     this.rerender();
-  }.observes('url')
+  }.observes('url'),
+
+  actions: {
+    playTamilTV() {
+      this.setProperties({
+        isYTVideo: false,
+        post: null,
+        topic: null,
+        url: null
+      });
+    },
+
+    showLogin() {
+      this.sendAction('showLogin');
+    }
+  }
 })

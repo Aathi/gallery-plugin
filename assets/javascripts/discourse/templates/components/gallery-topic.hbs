@@ -1,7 +1,16 @@
-<div id={{videoParentId}}></div>
+<div class="gallery-topic-item">
+  <div style="position: relative;">
+    <div id={{videoParentId}}></div>
+    <div class="gallery-topic-overlay" {{action "playInTV" topic}}></div>
+  </div>
 
-<div class="gallery-topic-overlay" {{action "playInTV" topic}}>
-  {{topic.title}}
+  <div class="status">
+    <span> {{topic.like_count}} <i class="fa fa-heart"></i> </span>
+
+    <span>
+      <a href="/t/{{topic.slug}}/{{topic.id}}/{{topic.last_read_post_number}}"> {{topic.posts_count}} <i class="fa fa-reply"></i> replies </a>
+    </span>
+  </div>
 </div>
 {{!clappr-video url="http://giant.gfycat.com/FineDangerousFruitbat.mp4" parentId=clapprParentId}}
 

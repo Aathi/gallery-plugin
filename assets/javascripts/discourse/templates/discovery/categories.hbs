@@ -1,17 +1,21 @@
 <div class="container gallery-container">
-  {{tamil-tv url=tvUrl post=tvPost isYTVideo=isYTVideo}}
+  {{tamil-tv url=tvUrl topic=tvTopic post=tvPost isYTVideo=isYTVideo}}
 
-    {{#each groupedTopics as |item|}}
-    <div class="gallery-row">
-      <div class="gallery-header">
-        <h3>{{item.value}}</h3>
+  {{#each groupedTopics as |item|}}
+    {{#if item.items}}
+      <div class="gallery-row">
+        <div class="gallery-header">
+          <h3>
+            <a href="/c/{{item.items.0.category.slug}}">{{item.value}}</a>
+          </h3>
+        </div>
+
+        <ul class="gallery-topics-row">
+          {{#each item.items as |topic|}}
+            {{gallery-topic topic=topic action="playInTV"}}
+          {{/each}}
+        </ul>
       </div>
-
-      <ul class="gallery-topics-row">
-        {{#each item.items as |topic|}}
-          {{gallery-topic topic=topic action="playInTV"}}
-        {{/each}}
-      </ul>
-    </div>
+    {{/if}}
   {{/each}}
 </div>

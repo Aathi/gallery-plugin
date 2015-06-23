@@ -2,7 +2,7 @@ let isEmpty = Ember.isEmpty;
 
 export default Ember.Component.extend({
   tagName: 'li',
-  classNames: ['gallery-topic-item'],
+  classNames: ['gallery-topic-item-container'],
   attributeBindings: ['data-video-url'],
   'data-video-url': Ember.computed.oneWay('_clapprUrl'),
 
@@ -79,7 +79,8 @@ export default Ember.Component.extend({
       this.sendAction('action', {
         url: videoUrl,
         isYTVideo: !Ember.isBlank(this.get('_ytUrl')),
-        post: this.get('_post')
+        post: this.get('_post'),
+        topic: this.get('topic')
       });
     }
   }

@@ -35,6 +35,7 @@ export default {
     DiscoveryCategoriesController.reopen({
       tvUrl: null,
       tvPost: null,
+      tvTopic: null,
       isYTVideo: false,
 
       groupedTopics: groupBy('model', 'category.name'),
@@ -47,6 +48,7 @@ export default {
           this.setProperties({
             tvUrl: get(options, 'url'),
             tvPost: get(options, 'post'),
+            tvTopic: get(options, 'topic'),
             isYTVideo: get(options, 'isYTVideo')
           });
         }

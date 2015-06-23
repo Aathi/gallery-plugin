@@ -1,5 +1,21 @@
 <div id={{videoParentId}}></div>
 
+{{#if isYTVideo}}
+  <div class="topic-status">
+    <div class="topic-actions">
+      <span>{{topic.like_count}} <i class="fa fa-heart"></i></span>
+      <span>
+        <a href="/t/{{topic.slug}}/{{topic.id}}/{{topic.last_read_post_number}}"> {{topic.posts_count}} <i class="fa fa-reply"></i> replies </a>
+      </span>
+    </div>
+
+    <button class="btn btn-primary" {{action "playTamilTV"}}>
+      <i class="fa fa-play"></i>
+      PLAY TAMIL TV
+    </button>
+  </div>
+{{/if}}
+
 <!-- <div class="gallery-topic-actions">
   Actions will go here
 </div> -->
