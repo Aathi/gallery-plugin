@@ -87,7 +87,7 @@ export default {
 
       setupController(controller, model) {
         var currentUser = Discourse.User.current();
-        this.controllerFor('navigation/categories').set('canCreateCategory', currentUser.get('admin'));
+        this.controllerFor('navigation/categories').set('canCreateCategory', (currentUser && currentUser.get('admin')));
 
         controller.set('model', model);
       }
