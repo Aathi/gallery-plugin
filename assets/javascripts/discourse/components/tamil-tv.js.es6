@@ -40,14 +40,14 @@ export default Ember.Component.extend({
         let playerElement = this.$(`#${this.get('videoParentId')}`);
         let player = new Clappr.Player({
           source: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
-          plugins: { playback: [P2PHLS], container: [P2PHLSStats] },
+          plugins: { playback: [P2PHLS] }, // container: [P2PHLSStats] },
           width: '100%',
           height: 500,
           autoPlay: this.get('autoPlay')
         });
 
         player.attachTo(playerElement);
-        p.core.containers[0].getPlugin('p2phlsstats').show();
+        // p.core.containers[0].getPlugin('p2phlsstats').show();
       }
     });
   }.on('didInsertElement'),

@@ -75,6 +75,9 @@ export default {
 
         return Discourse.TopicList.list(`tags/${DASHBOARD_TAG}`).then((json) => {
           return json.topics;
+        }).catch((error) => {
+          console.error(error);
+          throw error;
         });
       },
 
@@ -83,6 +86,9 @@ export default {
       },
 
       setupController(controller, model) {
+        var currentUser = Discourse.User.current();
+        this.controllerFor('navigation/categories').set('canCreateCategory', currentUser.get('admin'));
+
         controller.set('model', model);
       }
     })
