@@ -9,7 +9,7 @@ export default Ember.Component.extend({
     Ember.run.scheduleOnce('afterRender', this, function() {
       new Clappr.Player({
         source: url,
-        parentId: `#${parentId}`
+        parentId: '#' + parentId
       });
     })
   }.on('didInsertElement')

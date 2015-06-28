@@ -71,8 +71,9 @@ export default {
         PreloadStore.remove("topic_list");
 
         const DASHBOARD_TAG = 'dashboard';
+        let url = 'tags/' + DASHBOARD_TAG;
 
-        return Discourse.TopicList.list(`tags/${DASHBOARD_TAG}`).then((json) => {
+        return Discourse.TopicList.list(url).then((json) => {
           return json.topics;
         }).catch((error) => {
           console.error(error);

@@ -13,14 +13,15 @@ export default Ember.Component.extend({
   _post: null,
 
   videoParentId: function() {
-    return `gallery-${this.elementId}`;
+    return 'gallery-' + this.elementId;
   }.property('elementId'),
 
 // This will be removed, once fixed at api
   fetchTopicDetails: function() {
     const topicId = this.get('topic.id');
+    let url = '/t/' + topicId + '.json';
 
-    Discourse.ajax(`/t/${topicId}.json`).then(function(json) {
+    Discourse.ajax(url).then(function(json) {
       let posts = json.post_stream.posts;
       if(!isEmpty(posts)) {
         let post = posts[0];
@@ -47,7 +48,7 @@ export default Ember.Component.extend({
     Ember.run.scheduleOnce('afterRender', this, function() {
       new Clappr.Player({
         source: url,
-        parentId: `#${this.get('videoParentId')}`,
+        parentId: '#' + this.get('videoParentId'),
         width: 256,
         height: 225
       });
@@ -65,7 +66,7 @@ export default Ember.Component.extend({
       'data-height': '225'
     });
 
-    let lazyYTContainer = $(`#${this.get('videoParentId')}`).append(filteredYT);
+    let lazyYTContainer = $('#' + this.get('videoParentId')).append(filteredYT);
     let lazyYT = $('.lazyYT', lazyYTContainer);
     lazyYT.lazyYT();
   },

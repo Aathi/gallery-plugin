@@ -11,7 +11,7 @@ export default Ember.Component.extend({
   showLogin: 'showLogin',
 
   videoParentId: function() {
-    return `gallery-${this.elementId}`;
+    return 'gallery-' + this.elementId;
   }.property('elementId'),
 
   initializeClappr: function() {
@@ -27,7 +27,7 @@ export default Ember.Component.extend({
           'data-parameters': "autoplay=0"
         });
 
-        let lazyYTContainer = $(`#${this.get('videoParentId')}`).append($yt);
+        let lazyYTContainer = $('#' + this.get('videoParentId')).append($yt);
         let lazyYT = $('.lazyYT', lazyYTContainer);
         lazyYT.lazyYT();
 
@@ -37,7 +37,7 @@ export default Ember.Component.extend({
 
         $('.ytp-thumbnail', lazyYTContainer).click();
       } else {
-        let playerElement = this.$(`#${this.get('videoParentId')}`);
+        let playerElement = this.$('#' + this.get('videoParentId'));
         let player = new Clappr.Player({
           source: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
           plugins: { playback: [P2PHLS] }, // container: [P2PHLSStats] },
