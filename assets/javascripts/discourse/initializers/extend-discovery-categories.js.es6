@@ -28,10 +28,9 @@ export default function groupBy(collection, property) {
   }).readOnly();
 }
 
-
 export default {
   name: 'extend-for-discovery-categories',
-  initialize() {
+  initialize(container, application) {
     DiscoveryCategoriesController.reopen({
       tvUrl: null,
       tvPost: null,
