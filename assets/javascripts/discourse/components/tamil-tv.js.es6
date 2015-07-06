@@ -7,6 +7,7 @@ export default Ember.Component.extend({
   post: null,
   isYTVideo: false,
   autoPlay: true,
+  tvSource: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
 
   showLogin: 'showLogin',
 
@@ -38,16 +39,27 @@ export default Ember.Component.extend({
         $('.ytp-thumbnail', lazyYTContainer).click();
       } else {
         let playerElement = this.$('#' + this.get('videoParentId'));
-        let player = new Clappr.Player({
-          source: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
-          plugins: { playback: [P2PHLS] }, // container: [P2PHLSStats] },
-          width: '100%',
-          height: 500,
-          autoPlay: this.get('autoPlay')
-        });
 
-        player.attachTo(playerElement);
-        // p.core.containers[0].getPlugin('p2phlsstats').show();
+        if(Discourse.Mobile.mobileView) {
+          jwplayer(this.get("videoParentId")).setup({
+            file: this.get('tvSource'),
+            width: '100%',
+            aspectratio: '16:9',
+            skin: 'vapor',
+            autostart: 'true',
+          });
+        } else {
+          let player = new Clappr.Player({
+            source: this.get('tvSource'),
+            plugins: { playback: [P2PHLS] }, // container: [P2PHLSStats] },
+            width: '100%',
+            height: 500,
+            autoPlay: this.get('autoPlay')
+          });
+
+          player.attachTo(playerElement);
+          // p.core.containers[0].getPlugin('p2phlsstats').show();
+        }
       }
     });
   }.on('didInsertElement'),
