@@ -5,12 +5,12 @@ export default Ember.Object.extend({
   ref: null,
 
   initializeTamilhub: function() {
-    var tamilhubRef = new Firebase(this.get('firebaseInstance'));
+    let tamilhubRef = new Firebase(this.get('firebaseInstance'));
     this.set('ref', tamilhubRef);
   }.on('init'),
 
   fetch(url) {
-    var urlRef = this.get('ref').child(url);
+    let urlRef = this.get('ref').child(url);
 
     return new Ember.RSVP.Promise(function(resolve, reject) {
       urlRef.on('value', function(snapshot) {
@@ -19,5 +19,23 @@ export default Ember.Object.extend({
         reject(error);
       });
     });
+  },
+
+  save(url, data) {
+    let urlRef = this.get('ref').child(url);
+
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      urlRef.set(data, function(error) {
+        if(error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
+
+  remove(url) {
+    this.save(url, null);
   }
 });

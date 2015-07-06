@@ -76,9 +76,6 @@ ul.gallery-topics-row {
 }
 
 .primary-tv {
-  position: relative;
-  background-color: #444;
-  opacity: 0.8;
   color: #fff;
   margin-bottom: 65px;
 
@@ -172,4 +169,12 @@ address .country {
 
 address .telephone {
   margin-top: 20px;
+}
+
+.firebase-pusher {
+  margin: 10px 0;
+
+  textarea {
+    width: 100%;
+  }
 }
