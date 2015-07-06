@@ -27,10 +27,6 @@ ul.gallery-topics-row {
     margin-bottom: 25px;
   }
 
-  li:nth-child(4n) {
-    margin-right: 0;
-  }
-
   &::before, &::after {
     content: '';
     display: table;
@@ -181,4 +177,10 @@ address .telephone {
 
 #reply-control.edit-title.open {
   height: 500px;
+}
+
+@media (max-width: 1024px) {
+  .gallery-row {
+    padding-left: 15px;
+  }
 }
