@@ -23,7 +23,7 @@ ul.gallery-topics-row {
   margin: 20px 0 0 0;
 
   li {
-    margin-right: 2.5%;
+    margin-right: 15px;
     margin-bottom: 25px;
   }
 
@@ -177,4 +177,8 @@ address .telephone {
   textarea {
     width: 100%;
   }
+}
+
+#reply-control.edit-title.open {
+  height: 500px;
 }
