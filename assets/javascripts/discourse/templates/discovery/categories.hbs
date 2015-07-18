@@ -3,19 +3,7 @@
 
   {{#each groupedTopics as |item|}}
     {{#if item.items}}
-      <div class="gallery-row">
-        <div class="gallery-header">
-          <h3>
-            <a href="/c/{{item.items.0.category.slug}}">{{item.value}}</a>
-          </h3>
-        </div>
-
-        <ul class="gallery-topics-row">
-          {{#each item.items as |topic|}}
-            {{gallery-topic topic=topic action="playInTV"}}
-          {{/each}}
-        </ul>
-      </div>
+      {{gallery-topic-list topicGroup=item}}
     {{/if}}
   {{/each}}
 </div>

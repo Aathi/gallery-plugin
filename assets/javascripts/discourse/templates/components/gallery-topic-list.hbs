@@ -1,0 +1,14 @@
+<div class="gallery-row">
+  <div class="gallery-header">
+    <h3>
+      <a href="/c/{{topicGroup.items.0.category.slug}}">{{topicGroup.value}}</a>
+    </h3>
+  </div>
+
+  <ul class="gallery-topics-row">
+    {{#each topics as |topic|}}
+      {{gallery-topic topic=topic action="topicClicked"}}
+    {{/each}}
+  </ul>
+  <a class="view-more-categories" href="/c/{{topicGroup.items.0.category.slug}}">View More Videos</a>
+</div>

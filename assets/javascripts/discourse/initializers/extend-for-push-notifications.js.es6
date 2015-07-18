@@ -21,7 +21,7 @@ export default {
     ComposerController.reopen({
       tamilhub: Ember.inject.service(),
       isEdit: computed.notEmpty('topic.id'),
-      
+
       pushToFirebase(firebase_notification_url, data) {
         return this.get('tamilhub').save('/pushnotifications/' + firebase_notification_url, removeUndefinedObjVals(data));
       },

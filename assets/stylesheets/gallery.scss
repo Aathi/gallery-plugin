@@ -45,7 +45,6 @@ ul.gallery-topics-row {
   text-align: center;
   color: #fff;
   font-weight: 300;
-  opacity: 0.7;
 }
 
 .gallery-topic-item {
@@ -182,5 +181,43 @@ address .telephone {
 @media (max-width: 1024px) {
   .gallery-row {
     padding-left: 15px;
+  }
+}
+
+.view-more-categories {
+  float: right;
+  font-size: 12px;
+  font-weight: 400;
+  padding-right: 15px;
+}
+
+//Spinner
+.th-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 100px auto;
+  background-color: #333;
+
+  border-radius: 100%;
+  -webkit-animation: scaleout 1.0s infinite ease-in-out;
+  animation: scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes scaleout {
+  0% { -webkit-transform: scale(0.0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+@keyframes scaleout {
+  0% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 100% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+    opacity: 0;
   }
 }

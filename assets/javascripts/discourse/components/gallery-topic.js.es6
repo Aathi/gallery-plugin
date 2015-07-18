@@ -12,6 +12,8 @@ export default Ember.Component.extend({
   _ytUrl: null,
   _post: null,
 
+  isLoading: false,
+
   videoParentId: function() {
     return 'gallery-' + this.elementId;
   }.property('elementId'),
@@ -21,7 +23,9 @@ export default Ember.Component.extend({
     const topicId = this.get('topic.id');
     let url = '/t/' + topicId + '.json';
 
+    this.set('isLoading', true);
     Discourse.ajax(url).then(function(json) {
+      this.set('isLoading', false);
       let posts = json.post_stream.posts;
       if(!isEmpty(posts)) {
         let post = posts[0];
