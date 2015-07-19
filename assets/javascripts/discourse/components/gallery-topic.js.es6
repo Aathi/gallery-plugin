@@ -62,11 +62,16 @@ export default Ember.Component.extend({
   initializeYT(cooked) {
     let $cooked = $(cooked);
     let filteredYT = $cooked.filter('.lazyYT');
+    let width = 256;
 
     this.set('_ytUrl', filteredYT.prop('outerHTML'));
 
+    if(Discourse.Mobile.mobileView) {
+      width = '100%';
+    }
+
     filteredYT = filteredYT.attr({
-      'data-width': '256',
+      'data-width': width,
       'data-height': '225'
     });
 
