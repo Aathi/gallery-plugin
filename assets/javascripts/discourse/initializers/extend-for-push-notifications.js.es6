@@ -22,6 +22,14 @@ export default {
       tamilhub: Ember.inject.service(),
       isEdit: computed.notEmpty('topic.id'),
 
+      canEditTags: computed('model.canEditTitle', 'model.creatingPrivateMessage', function() {
+        var currentUser = Discourse.User.current();
+        return (currentUser && (currentUser.get('admin') || currentUser.get('staff'))) &&
+               !this.site.mobileView &&
+               this.get('model.canEditTitle') &&
+               !this.get('model.creatingPrivateMessage');
+      }),
+
       pushToFirebase(firebase_notification_url, data) {
         return this.get('tamilhub').save('/pushnotifications/' + firebase_notification_url, removeUndefinedObjVals(data));
       },

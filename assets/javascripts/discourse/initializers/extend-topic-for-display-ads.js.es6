@@ -1,7 +1,7 @@
 import TopicController from 'discourse/controllers/topic';
 import PostView from 'discourse/views/post';
 
-const { isEmpty } = Ember;
+const { isEmpty, computed } = Ember;
 
 let getArrayFromFirebaseObject = function(obj) {
   let tmpArray = [];
@@ -27,6 +27,11 @@ export default {
   name: 'extend-topic-for-display-ads',
   initialize(container, application) {
     TopicController.reopen({
+      canEditTags: computed('model.isPrivateMessage', function() {
+        var currentUser = Discourse.User.current();
+        return (currentUser && (currentUser.get('admin') || currentUser.get('staff'))) && !this.get('model.isPrivateMessage');
+      }),
+
       tamilhub: Ember.inject.service(),
       tvAds: null,
 

@@ -53,7 +53,7 @@ export default Ember.Component.extend({
             source: this.get('tvSource'),
             plugins: { playback: [P2PHLS] }, // container: [P2PHLSStats] },
             width: '100%',
-            height: 500,
+            height: '616px',
             autoPlay: this.get('autoPlay')
           });
 
