@@ -34,6 +34,7 @@ export default {
 
       tamilhub: Ember.inject.service(),
       tvAds: null,
+      firebaseTags: null,
 
       getRandomAd() {
         var ads = this.get('tvAds') || [];
@@ -48,8 +49,18 @@ export default {
           }
           this.set('tvAds', ads);
         });
-      }.on('init')
+      }.on('init'),
 
+      fetchTags: function() {
+        let tags = [];
+
+        this.get('tamilhub').fetch('/tags').then((json) => {
+          if((!isEmpty(json))) {
+            tags = getArrayFromFirebaseObject(json);
+          }
+          this.set('firebaseTags', tags);
+        });
+      }.on('init')
     });
 
     PostView.reopen({

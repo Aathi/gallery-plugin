@@ -56,12 +56,15 @@ export default {
 
 
     DiscoveryCategoriesRoute.reopen({
+      page: 0,
+
       renderTemplate() {
         this.render('navigation/categories', { outlet: 'navigation-bar' });
         this.render('discovery/categories', { outlet: 'list-container' });
       },
 
       beforeModel() {
+        this.set('dashboardTopics', Ember.A());
         this.controllerFor('navigation/categories').set('filterMode', 'categories');
       },
 
@@ -73,9 +76,7 @@ export default {
         const DASHBOARD_TAG = 'dashboard';
         let url = 'tags/' + DASHBOARD_TAG;
 
-        return Discourse.TopicList.list(url).then((json) => {
-          return json.topics;
-        }).catch((error) => {
+        return this.fetchDashboardTopics(url).catch((error) => {
           console.error(error);
           throw error;
         });
@@ -83,6 +84,24 @@ export default {
 
       titleToken() {
         return 'Tamil TV';
+      },
+
+      fetchDashboardTopics(url, params) {
+        const store = Discourse.__container__.lookup('store:main');
+
+        return store.findFiltered("topicList", { filter: url, params: params }).then((json) => {
+          this.get('dashboardTopics').pushObjects(json.topics);
+          if(json.topics.length === 30) {
+            let newPage = this.get('page') + 1;
+            let pageParam = {
+              page: newPage
+            };
+
+            this.set('page', newPage);
+            return this.fetchDashboardTopics(url, pageParam);
+          }
+          return this.get('dashboardTopics');
+        });
       },
 
       setupController(controller, model) {

@@ -21,6 +21,36 @@ export default Ember.Object.extend({
     });
   },
 
+  push(url, data) {
+    let urlRef = this.get('ref').child(url);
+
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      let newRef;
+      newRef = urlRef.push(data, function(error) {
+        if(error) {
+          reject(error);
+        } else {
+          resolve(newRef);
+        }
+      });
+    });
+  },
+
+  update(url, data) {
+    let urlRef = this.get('ref').child(url);
+
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      let newRef;
+      newRef = urlRef.update(data, function(error) {
+        if(error) {
+          reject(error);
+        } else {
+          resolve(newRef);
+        }
+      });
+    });
+  },
+
   save(url, data) {
     let urlRef = this.get('ref').child(url);
 
