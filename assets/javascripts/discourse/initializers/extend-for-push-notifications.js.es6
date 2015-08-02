@@ -1,6 +1,6 @@
 import ComposerController from 'discourse/controllers/composer';
 
-const { isNone, computed, get } = Ember;
+const { isNone, computed, get, isBlank } = Ember;
 
 let getFirebaseURL = function(discourseTopicUrl) {
   return discourseTopicUrl.split('/').slice(-2).join('_');
@@ -20,6 +20,8 @@ export default {
   initialize(container, application) {
     ComposerController.reopen({
       tamilhub: Ember.inject.service(),
+      fb: Ember.inject.service('facebook'),
+
       topicController: Ember.inject.controller('topic'),
       isEdit: computed.notEmpty('topic.id'),
 
@@ -97,7 +99,13 @@ export default {
           let todayDate = new Date();
           let firebase_notification_url;
           let discourse_topic_url;
-          debugger;
+
+          if(this.get('facebook.share') && !isBlank(this.get('facebook.link'))) {
+            this.get('fb').share({
+              link: this.get('facebook.link'),
+              message: this.get('facebook.message')
+            });
+          }
 
           this.save().then((json) => {
             let data = {

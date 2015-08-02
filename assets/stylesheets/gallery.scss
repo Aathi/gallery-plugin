@@ -167,6 +167,7 @@ address .telephone {
 }
 
 .firebase-pusher {
+  width: 25%;
   margin: 10px 0;
 
   textarea {
@@ -175,7 +176,7 @@ address .telephone {
 }
 
 #reply-control.edit-title.open {
-  height: 500px;
+  height: 674px;
 }
 
 @media (max-width: 1024px) {
@@ -220,4 +221,22 @@ address .telephone {
     -webkit-transform: scale(1.0);
     opacity: 0;
   }
+}
+
+.social-shares {
+  .share-section {
+    width: 25%;
+    float: left;
+    margin-right: 35px;
+  }
+
+  input, textarea {
+    width: 100%;
+  }
+}
+
+
+.submit-panel {
+  left: 30px;
+  right: 30px;
 }
