@@ -1,5 +1,7 @@
 let isBlank = Ember.isBlank;
 
+const isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+
 export default Ember.Component.extend({
   classNames: ['primary-tv'],
 
@@ -40,14 +42,8 @@ export default Ember.Component.extend({
       } else {
         let playerElement = this.$('#' + this.get('videoParentId'));
 
-        if(Discourse.Mobile.mobileView) {
-          jwplayer(this.get("videoParentId")).setup({
-            file: this.get('tvSource'),
-            width: '100%',
-            aspectratio: '16:9',
-            skin: 'vapor',
-            autostart: 'true',
-          });
+        if(Discourse.Mobile.mobileView || isSafari) {
+          this.initializeJWPlayer();
         } else {
           let player = new Clappr.Player({
             source: this.get('tvSource'),
@@ -58,11 +54,41 @@ export default Ember.Component.extend({
           });
 
           player.attachTo(playerElement);
-          // p.core.containers[0].getPlugin('p2phlsstats').show();
+
+          this.checkClapprCompatibility().catch((error) => {
+            this.initializeJWPlayer();
+          });
         }
       }
     });
   }.on('didInsertElement'),
+
+  checkClapprCompatibility: function() {
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      window.onerror = function errorHandler(msg, url, line) {
+        try {
+          var error = new Error();
+          throw error;
+        } catch (error) {
+          var stack = error.stack;
+          if(stack.indexOf('checkClapprCompatibility') !== -1) {
+            reject(error);
+          }
+        }
+      }
+      $('div[data-poster].player-poster').click()
+    });
+  },
+
+  initializeJWPlayer: function() {
+    jwplayer(this.get("videoParentId")).setup({
+      file: this.get('tvSource'),
+      width: '100%',
+      aspectratio: '16:9',
+      skin: 'vapor',
+      autostart: 'true',
+    });
+  },
 
   urlDidChange: function() {
     this.rerender();

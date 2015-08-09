@@ -100,7 +100,7 @@ export default {
           let firebase_notification_url;
           let discourse_topic_url;
 
-          if(this.get('facebook.share') && !isBlank(this.get('facebook.link'))) {
+          if(this.get('facebook.share') && (!isBlank(this.get('facebook.link')) || !isBlank(this.get('facebook.message')))) {
             this.get('fb').share({
               link: this.get('facebook.link'),
               message: this.get('facebook.message')

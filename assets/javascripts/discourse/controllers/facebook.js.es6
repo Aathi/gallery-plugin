@@ -1,5 +1,7 @@
 import Ember from 'ember';
 
+const TAMILTVPAGE_ID = '1567905173450273';
+
 export default Ember.Object.extend({
   loadFB(options) {
     if(FB) {
@@ -38,17 +40,17 @@ export default Ember.Object.extend({
           resolve(response);
         }
        }, {
-         scope: 'publish_actions',
+         scope: 'manage_pages,publish_pages,publish_actions',
          auth_type: 'rerequest',
          return_scopes: true
        });
     });
   },
 
-  getAccessToken() {
-    if(this.get('accessToken')) {
+  getUserAccessToken() {
+    if(this.get('userAccessToken')) {
       return new Ember.RSVP.Promise((resolve) => {
-        resolve(this.get('accessToken'));
+        resolve(this.get('userAccessToken'));
       });
     }
 
@@ -57,7 +59,7 @@ export default Ember.Object.extend({
         if (response.status === 'connected') {
           this.setProperties({
             uid: response.authResponse.userID,
-            accessToken: response.authResponse.accessToken
+            userAccessToken: response.authResponse.accessToken
           });
 
           resolve(response.authResponse.accessToken);
@@ -66,10 +68,30 @@ export default Ember.Object.extend({
           // but has not authenticated your app
         } else {
           return this.login().then((response) => {
-            resolve(response);
-            return response;
+            resolve(response.authResponse.accessToken);
           });
         }
+      });
+    });
+  },
+
+  getPageAccessToken() {
+    var self = this;
+    return this.getUserAccessToken().then((userAccessToken) => {
+      return new Ember.RSVP.Promise(function(resolve, reject) {
+        FB.api('/me/accounts', {
+          access_token: userAccessToken
+        }, function(response) {
+          if (response && response.error) {
+            console.error(response.error);
+          } else {
+            var pages = response.data;
+            var tamilTVPage = pages.findBy('id', TAMILTVPAGE_ID);
+            var pageAccessToken = tamilTVPage.access_token;
+            self.set('pageAccessToken', pageAccessToken)
+            resolve(pageAccessToken);
+          }
+        });
       });
     });
   },
@@ -77,7 +99,8 @@ export default Ember.Object.extend({
   _share(options) {
     var self = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      FB.api('/me/feed', 'POST', {
+      FB.api('/' + TAMILTVPAGE_ID + '/feed', 'POST', {
+        access_token: self.get('pageAccessToken'),
         message: options.message,
         link: options.link
       }, function (response) {
@@ -86,6 +109,8 @@ export default Ember.Object.extend({
             return self.login().then(function(response) {
               return self._share(options);
             });
+          } else {
+            console.error(response.error);
           }
           /* handle the result */
         } else {
@@ -97,7 +122,7 @@ export default Ember.Object.extend({
 
   share(options) {
     return this.loadFB().then(() => {
-      return this.getAccessToken().then(() => {
+      return this.getPageAccessToken().then(() => {
         return this._share(options);
       });
     });
