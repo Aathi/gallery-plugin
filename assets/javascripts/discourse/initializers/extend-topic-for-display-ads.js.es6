@@ -1,5 +1,6 @@
 import TopicController from 'discourse/controllers/topic';
 import PostView from 'discourse/views/post';
+import PostModel from 'discourse/models/post';
 
 const { isEmpty, computed } = Ember;
 
@@ -61,6 +62,26 @@ export default {
           this.set('firebaseTags', tags);
         });
       }.on('init')
+    });
+
+    PostModel.reopen({
+      // Extracts the facebook links from the `cooked` string
+      oneboxFBLinks: function() {
+        var cooked = this.cooked;
+        var $cooked = $(cooked);
+        var $oneboxlinks = $('a.onebox', $cooked);
+
+        var fbLinks = $.makeArray($oneboxlinks).map(function(oneboxLink) {
+          let href = $(oneboxLink).attr('href');
+
+          if(href && href.indexOf('facebook.com')) {
+            return href;
+          }
+        }).compact();
+
+        fbLinks = fbLinks.compact();
+        this.set('_fbLinks', fbLinks);
+      }.on('init').observes('updated_at')
     });
 
     PostView.reopen({

@@ -74,6 +74,7 @@ ul.gallery-topics-row {
   color: #fff;
   margin-bottom: 65px;
   min-height: 616px;
+  position: relative;
 
   .topic-status {
     color: #fff;
@@ -197,8 +198,10 @@ address .telephone {
 .th-spinner {
   width: 50px;
   height: 50px;
-  margin: 100px auto;
   background-color: #333;
+  position: absolute;
+  top: 40%;
+  left: 40%;
 
   border-radius: 100%;
   -webkit-animation: scaleout 1.0s infinite ease-in-out;
@@ -240,4 +243,8 @@ address .telephone {
 .submit-panel {
   left: 30px;
   right: 30px;
+}
+
+.facebook-video {
+  margin: 15px 0;
 }

@@ -2,6 +2,25 @@ let isBlank = Ember.isBlank;
 
 const isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
 
+const clapperDependencies = [
+  {
+    name: 'UNDERSCORE',
+    src: 'http://cdn.clappr.io/j/vendor/underscore-min.js',
+  },
+  {
+    name: 'Clappr',
+    src: 'http://cdn.clappr.io/0.0.62/clappr.min.js'
+  },
+  {
+    name: 'P2PHLSStats',
+    src: 'http://p2p.gopi.io/js/p2phlsstats.min.js'
+  },
+  {
+    name: 'P2PHLS',
+    src: 'http://cdn.clappr.io/bemtv/latest/p2phls.min.js'
+  }
+];
+
 export default Ember.Component.extend({
   classNames: ['primary-tv'],
 
@@ -12,10 +31,49 @@ export default Ember.Component.extend({
   tvSource: 'http://tv-streamer-lon-01.orutv.com/broadcast.m3u8',
 
   showLogin: 'showLogin',
+  initializing: false,
 
   videoParentId: function() {
     return 'gallery-' + this.elementId;
   }.property('elementId'),
+
+  resolveClapprDependenciesIfAny: function() {
+    var promises = [];
+
+    clapperDependencies.forEach((dependency) => {
+      let resolvedPromise;
+      if(window[dependency.name]) {
+        resolvedPromise = new Ember.RSVP.Promise(function(resolve, reject) {
+          resolve(window[dependency.name]);
+        });
+
+        promises.pushObject(resolvedPromise);
+      } else {
+        resolvedPromise = new Ember.RSVP.Promise(function(resolve, reject) {
+          window.injectDynamicScript(dependency.src, function() {
+            if(dependency.name === 'UNDERSCORE') {
+              window['UNDERSCORE'] = _;
+            }
+            resolve(window[dependency.name]);
+          });
+        });
+
+        promises.pushObject(resolvedPromise);
+      }
+    });
+
+    return Ember.RSVP.all(promises);
+  },
+
+  loadDependencies: function() {
+    this.set('initializing', true);
+    window._lodash = _.noConflict(); // This is a hack to prevent conflicting of Discourse's dependency lodash & Clappr's dependency underscore.js
+    this.resolveClapprDependenciesIfAny().then((dependencies) => {
+      window._ = window._lodash
+      this.set('initializing', false);
+      this.initializeClappr();
+    })
+  }.on('didInsertElement'),
 
   initializeClappr: function() {
     let url = this.get('url');
@@ -61,7 +119,7 @@ export default Ember.Component.extend({
         }
       }
     });
-  }.on('didInsertElement'),
+  },
 
   checkClapprCompatibility: function() {
     return new Ember.RSVP.Promise(function(resolve, reject) {
