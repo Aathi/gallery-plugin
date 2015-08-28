@@ -79,7 +79,6 @@ export default {
           }
         }).compact();
 
-        fbLinks = fbLinks.compact();
         this.set('_fbLinks', fbLinks);
       }.on('init').observes('updated_at')
     });

@@ -94,11 +94,15 @@ export default {
           let video_url = this.get('video_url');
           let firebaseTags = this.get('topicController.firebaseTags');
           let categories = this.get('categories');
-          let category = categories.findBy('id', this.get('categoryId'));
-          let videoTag = firebaseTags.findBy('name', get(category, 'name'));
+          let category = categories.findBy('id', this.get('model.categoryId'));
           let todayDate = new Date();
           let firebase_notification_url;
           let discourse_topic_url;
+          let videoTag;
+
+          if(firebaseTags && category) {
+            videoTag = firebaseTags.findBy('name', get(category, 'name'));
+          }
 
           if(this.get('facebook.share') && (!isBlank(this.get('facebook.link')) || !isBlank(this.get('facebook.message')))) {
             this.get('fb').share({

@@ -1,5 +1,5 @@
 import DiscoveryCategoriesController from 'discourse/controllers/discovery/categories';
-import DiscoveryCategoriesRoute from 'discourse/routes/discovery-categories-route';
+import DiscoveryCategoriesRoute from 'discourse/routes/discovery-categories';
 
 var get = Ember.get;
 var computed = Ember.computed;

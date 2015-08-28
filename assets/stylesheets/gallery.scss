@@ -168,15 +168,6 @@ address .telephone {
   margin-top: 20px;
 }
 
-.firebase-pusher {
-  width: 25%;
-  margin: 10px 0;
-
-  textarea {
-    width: 100%;
-  }
-}
-
 #reply-control.edit-title.open {
   height: 674px;
 }
@@ -227,19 +218,6 @@ address .telephone {
   }
 }
 
-.social-shares {
-  .share-section {
-    width: 25%;
-    float: left;
-    margin-right: 35px;
-  }
-
-  input, textarea {
-    width: 100%;
-  }
-}
-
-
 .submit-panel {
   left: 30px;
   right: 30px;
@@ -247,4 +225,17 @@ address .telephone {
 
 .facebook-video {
   margin: 15px 0;
+}
+
+.composer-fields-below-outlet {
+  width: 50%;
+  margin-bottom: 5px;
+
+  input, textarea {
+    width: 100%;
+  }
+}
+
+.edit-topic-outlet.edit-tags {
+  width: 350px;
 }
