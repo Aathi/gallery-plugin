@@ -5,7 +5,7 @@ const isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Con
 const clapperDependencies = [
   {
     name: 'UNDERSCORE',
-    src: 'http://cdn.clappr.io/j/vendor/underscore-min.js',
+    src: 'http://cdn.clappr.io/j/vendor/underscore-min.js'
   },
   {
     name: 'Clappr',
@@ -13,7 +13,7 @@ const clapperDependencies = [
   },
   {
     name: 'P2PHLSStats',
-    src: 'http://p2p.gopi.io/js/p2phlsstats.min.js'
+    src: 'http://cdn.clappr.io/bemtv/latest/p2phlsstats.min.js'
   },
   {
     name: 'P2PHLS',
@@ -42,7 +42,7 @@ export default Ember.Component.extend({
 
     clapperDependencies.forEach((dependency) => {
       let resolvedPromise;
-      if(window[dependency.name]) {
+      if (window[dependency.name]) {
         resolvedPromise = new Ember.RSVP.Promise(function(resolve, reject) {
           resolve(window[dependency.name]);
         });
@@ -51,9 +51,10 @@ export default Ember.Component.extend({
       } else {
         resolvedPromise = new Ember.RSVP.Promise(function(resolve, reject) {
           window.injectDynamicScript(dependency.src, function() {
-            if(dependency.name === 'UNDERSCORE') {
+            if (dependency.name === 'UNDERSCORE') {
               window['UNDERSCORE'] = _;
             }
+
             resolve(window[dependency.name]);
           });
         });
@@ -69,23 +70,23 @@ export default Ember.Component.extend({
     this.set('initializing', true);
     window._lodash = _.noConflict(); // This is a hack to prevent conflicting of Discourse's dependency lodash & Clappr's dependency underscore.js
     this.resolveClapprDependenciesIfAny().then((dependencies) => {
-      window._ = window._lodash
+      window._ = window._lodash;
       this.set('initializing', false);
       this.initializeClappr();
-    })
+    });
   }.on('didInsertElement'),
 
   initializeClappr: function() {
     let url = this.get('url');
 
     Ember.run.scheduleOnce('afterRender', this, function() {
-      if(this.get('isYTVideo')) {
+      if (this.get('isYTVideo')) {
         let $yt = $(this.get('url'));
 
         $yt.attr({
           'data-width': '100%',
           'data-height': '300',
-          'data-parameters': "autoplay=0"
+          'data-parameters': 'autoplay=0'
         });
 
         let lazyYTContainer = $('#' + this.get('videoParentId')).append($yt);
@@ -100,7 +101,7 @@ export default Ember.Component.extend({
       } else {
         let playerElement = this.$('#' + this.get('videoParentId'));
 
-        if(Discourse.Mobile.mobileView || isSafari) {
+        if (Discourse.Mobile.mobileView || isSafari) {
           this.initializeJWPlayer();
         } else {
           let player = new Clappr.Player({
@@ -129,22 +130,23 @@ export default Ember.Component.extend({
           throw error;
         } catch (error) {
           var stack = error.stack;
-          if(stack.indexOf('checkClapprCompatibility') !== -1) {
+          if (stack.indexOf('checkClapprCompatibility') !== -1) {
             reject(error);
           }
         }
-      }
-      $('div[data-poster].player-poster').click()
+      };
+
+      $('div[data-poster].player-poster').click();
     });
   },
 
   initializeJWPlayer: function() {
-    jwplayer(this.get("videoParentId")).setup({
+    jwplayer(this.get('videoParentId')).setup({
       file: this.get('tvSource'),
       width: '100%',
       aspectratio: '16:9',
       skin: 'vapor',
-      autostart: 'true',
+      autostart: 'true'
     });
   },
 
@@ -166,4 +168,4 @@ export default Ember.Component.extend({
       this.sendAction('showLogin');
     }
   }
-})
+});
